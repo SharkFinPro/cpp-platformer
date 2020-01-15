@@ -1,5 +1,4 @@
 #include "Tile.h"
-#include <cstdlib>
 
 Tile::Tile(float x, float y, float w, float h) {
     position.x = x;
@@ -7,7 +6,7 @@ Tile::Tile(float x, float y, float w, float h) {
     
     tileShape.setSize(sf::Vector2f(w, h));
     tileShape.setPosition(position);
-    tileShape.setFillColor(sf::Color(std::rand() % 255 + 1, std::rand() % 255 + 1, std::rand() % 255 + 1));
+    tileShape.setFillColor(sf::Color(125, 125, 125));
 }
 
 sf::FloatRect Tile::getPosition() {

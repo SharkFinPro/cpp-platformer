@@ -2,7 +2,14 @@
 #include "Tile.h"
 #include <vector>
 
-void Player::updateSpeeds(int change) {
+void Player::setPosition(float x, float y) {
+    position.x = x;
+    position.y = y;
+
+    tileShape.setPosition(position);
+}
+
+void Player::modify(float change) {
     speed *= change;
     maxSpeed *= change;
 
@@ -10,6 +17,8 @@ void Player::updateSpeeds(int change) {
 
     jumpHeight *= change;
     maxFallSpeed *= change;
+
+    tileShape.setFillColor(sf::Color(42, 139, 200));
 }
 
 void Player::collideWith(float xv, float yv, Tile tile) {

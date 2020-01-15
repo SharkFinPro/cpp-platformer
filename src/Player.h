@@ -4,22 +4,24 @@
 
 class Player : public Tile {
 private:
-	float speed = 4.0f;
-	float maxSpeed = 15.0f;
+	float speed = 2.0f;
+	float maxSpeed = 10.0f;
 
-	float gravity = 0.25f;
+	float gravity = 0.4f;
 	float xvel = 0.0f;
 	float yvel = 0.0f;
 	
-	float jumpHeight = 10.0f;
-	float maxFallSpeed = 7.5f;
+	float jumpHeight = 9.5f;
+	float maxFallSpeed = 12.0f;
 
 	bool falling = true;
 
 public:
 	Player(float x, float y, float w, float h) : Tile(x, y, w, h) {};
 
-	void updateSpeeds(int change);
+	void setPosition(float x, float y);
+
+	void modify(float change);
 
 	void collideWith(float xv, float yv, Tile tile);
 	
