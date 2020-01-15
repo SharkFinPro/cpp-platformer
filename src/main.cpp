@@ -16,6 +16,7 @@ int main() {
     // Tiles
     float tileSize = 50.0f * xMult;
     Player player(100.0f, 300.0f, tileSize, tileSize);
+    player.updateSpeeds(xMult);
     int tileMap[16][20] = {
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},

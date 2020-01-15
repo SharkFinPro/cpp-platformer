@@ -2,6 +2,16 @@
 #include "Tile.h"
 #include <vector>
 
+void Player::updateSpeeds(int change) {
+    speed *= change;
+    maxSpeed *= change;
+
+    gravity *= change;
+
+    jumpHeight *= change;
+    maxFallSpeed *= change;
+}
+
 void Player::collideWith(float xv, float yv, Tile tile) {
     float tx = tile.getPosition().left;
     float ty = tile.getPosition().top;
@@ -34,7 +44,6 @@ void Player::collideWith(float xv, float yv, Tile tile) {
         }
     }
 }
-
 
 void Player::update(float delta, float windowWidth, float windowHeight, std::vector<Tile> tiles) {
     // Cap the x axis speed
