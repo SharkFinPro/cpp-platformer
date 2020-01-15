@@ -1,2 +1,2 @@
-# cpp-platformer
-A basic C++ Platformer
+# C++ Platformer
+A Basic C++ Platformer
