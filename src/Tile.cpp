@@ -1,5 +1,9 @@
 #include "Tile.h"
 
+Tile::Tile() {
+
+}
+
 Tile::Tile(float x, float y, float w, float h) {
     position.x = x;
     position.y = y;

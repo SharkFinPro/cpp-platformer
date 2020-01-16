@@ -17,19 +17,17 @@ private:
 	bool falling = true;
 
 public:
-	Player(float x, float y, float w, float h) : Tile(x, y, w, h) {};
+	Player(float x, float y, float w, float h, float change);
 
 	void setPosition(float x, float y);
 
-	void modify(float change);
-
 	void collideWith(float xv, float yv, Tile tile);
 	
-	void update(float delta, float windowWidth, float windowHeight, std::vector<Tile> tiles);
+	void update(float windowWidth, float windowHeight, std::vector<Tile> tiles);
 
 	void jump();
 
-	void moveLeft(float delta);
+	void moveLeft();
 
-	void moveRight(float delta);
+	void moveRight();
 };

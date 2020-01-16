@@ -7,6 +7,7 @@ protected:
 	sf::RectangleShape tileShape;
 
 public:
+	Tile();
 	Tile(float x, float y, float w, float h);
 
 	sf::FloatRect getPosition();

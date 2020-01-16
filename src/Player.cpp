@@ -9,7 +9,16 @@ void Player::setPosition(float x, float y) {
     tileShape.setPosition(position);
 }
 
-void Player::modify(float change) {
+Player::Player(float x, float y, float w, float h, float change) {
+    //Player::Tile(x, y, w, h);
+    //Tile(x, y, w, h);
+    
+    position.x = x;
+    position.y = y;
+
+    tileShape.setSize(sf::Vector2f(w, h));
+    tileShape.setPosition(position);
+
     speed *= change;
     maxSpeed *= change;
 
@@ -37,24 +46,21 @@ void Player::collideWith(float xv, float yv, Tile tile) {
             yvel = 0;
             falling = false;
             position.y = ty - h;
-        }
-        if (yv < 0) { // Top
+        } else if (yv < 0) { // Top
             yvel = 0;
             falling = true;
             position.y = ty + th;
-        }
-        if (xv > 0) { // Right
+        } else if (xv > 0) { // Right
             xvel = 0;
             position.x = tx - w;
-        }
-        if (xv < 0) { // Left
+        } else if (xv < 0) { // Left
             xvel = 0;
             position.x = tx + tw;
         }
     }
 }
 
-void Player::update(float delta, float windowWidth, float windowHeight, std::vector<Tile> tiles) {
+void Player::update(float windowWidth, float windowHeight, std::vector<Tile> tiles) {
     // Cap the x axis speed
     if (xvel > maxSpeed) {
         xvel = maxSpeed;
@@ -104,10 +110,10 @@ void Player::jump() {
     }
 }
 
-void Player::moveLeft(float delta) {
+void Player::moveLeft() {
     xvel -= speed;
 }
 
-void Player::moveRight(float delta) {
+void Player::moveRight() {
     xvel += speed;
 }
