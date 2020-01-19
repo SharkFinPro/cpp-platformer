@@ -11,8 +11,10 @@ int main() {
 
     float windowWidth = (float)window.getSize().x;
     float windowHeight = (float)window.getSize().y;
+    bool focused = true;
 
     // Create Player and set tile size
+    std::vector<Tile> tiles;
     float tileSize = 800.0f / 24.0f * mult;
     Player player(100.0f, 300.0f, tileSize, tileSize, mult);
 
@@ -44,7 +46,6 @@ int main() {
         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
     };
 
-    std::vector<Tile> tiles;
     for (int i = 0; i < 24; i++) {
         for (int j = 0; j < 24; j++) {
             if (tileMap[i][j] == 1) {
@@ -63,21 +64,26 @@ int main() {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 window.close();
+            } else if (event.type == sf::Event::GainedFocus) {
+                focused = true;
+            } else if (event.type == sf::Event::LostFocus) {
+                focused = false;
             }
         }
 
         // Input
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-            window.close();
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-            player.jump();
-        }
-        if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) && player.getPosition().left > 0) {
-            player.moveLeft();
-        }
-        if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D)) && player.getPosition().left + player.getShape().getSize().x < windowWidth) {
-            player.moveRight();
+        if (focused) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+                window.close();
+            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+                player.jump();
+            }
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) && player.getPosition().left > 0) {
+                player.moveLeft();
+            }
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D)) && player.getPosition().left + player.getShape().getSize().x < windowWidth) {
+                player.moveRight();
+            }
         }
 
         // Update the Player
