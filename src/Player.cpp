@@ -2,37 +2,39 @@
 #include <vector>
 #include <string>
 
-void Player::init(float change) {
+#include <iostream>
+
+void Player::init(float *change) {
     tileShape.setFillColor(sf::Color(42, 139, 200));
 
-    speed *= change;
-    maxSpeed *= change;
+    speed *= *change;
+    maxSpeed *= *change;
 
-    gravity *= change;
+    gravity *= *change;
 
-    jumpHeight *= change;
-    maxFallSpeed *= change;
+    jumpHeight *= *change;
+    maxFallSpeed *= *change;
 }
 
 void Player::reset() {
-    setPosition(startX, startY);
+    setPosition(&startX, &startY);
 }
 
-void Player::setPosition(float x, float y) {
-    position.x = x;
-    position.y = y;
+void Player::setPosition(float *x, float *y) {
+    position.x = *x;
+    position.y = *y;
 
-    startX = x;
-    startY = y;
+    startX = *x;
+    startY = *y;
 
     tileShape.setPosition(position);
 }
 
-void Player::collideWith(float xv, float yv, Tile tile) {
-    float tx = tile.getPosition().left;
-    float ty = tile.getPosition().top;
-    float tw = tile.getShape().getSize().x;
-    float th = tile.getShape().getSize().y;
+void Player::collideWith(float xv, float yv, Tile *tile) {
+    float tx = tile->getPosition().left;
+    float ty = tile->getPosition().top;
+    float tw = tile->getShape().getSize().x;
+    float th = tile->getShape().getSize().y;
 
     float x = position.x;
     float y = position.y;
@@ -40,7 +42,7 @@ void Player::collideWith(float xv, float yv, Tile tile) {
     float h = getShape().getSize().y;
 
     if (y + h > ty && y < ty + th && x + w > tx && x < tx + tw) { // Check if tiles collide
-        if (tile.getType().compare("lava") == 0) {
+        if (tile->getType().compare("lava") == 0) {
             reset();
         } else if (yv > 0) { // Bottom
             yvel = 0;
@@ -60,7 +62,7 @@ void Player::collideWith(float xv, float yv, Tile tile) {
     }
 }
 
-void Player::update(float windowWidth, float windowHeight, std::vector<Tile> tiles) {
+void Player::update(std::vector<Tile> *tiles) {
     // Apply x updates & collisions
     xvel /= 1.55f;
     if (xvel > maxSpeed) {
@@ -69,15 +71,16 @@ void Player::update(float windowWidth, float windowHeight, std::vector<Tile> til
         xvel = -maxSpeed;
     }
     position.x += xvel;
-    for (int i = 0; i < (int)tiles.size(); i++) {
-        collideWith(xvel, 0, tiles[i]);
+    for (int i = 0; i < (int)tiles->size(); i++) {
+        collideWith(xvel, 0, &tiles->at(i));
     }
     
     // Apply y updates & collisions
+    falling = true;
     yvel += gravity;
     position.y += yvel;
-    for (int i = 0; i < (int)tiles.size(); i++) {
-        collideWith(0, yvel, tiles[i]);
+    for (int i = 0; i < (int)tiles->size(); i++) {
+        collideWith(0, yvel, &tiles->at(i));
     }
 
     // Set tileshape position

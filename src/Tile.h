@@ -11,7 +11,7 @@ protected:
 
 public:
 	Tile();
-	Tile(float x, float y, float w, float h, std::string type_);
+	Tile(float *x, float *y, float *w, float *h, std::string type_);
 
 	sf::FloatRect getPosition();
 

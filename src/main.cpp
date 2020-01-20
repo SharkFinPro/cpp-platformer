@@ -7,16 +7,17 @@ int main() {
     // Window
     float mult = (float)sf::VideoMode().getDesktopMode().width / 1920;
     sf::RenderWindow window(sf::VideoMode((int)(800 * mult), (int)(800 * mult)), "Platformer", sf::Style::Close);
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(0);
 
     float windowWidth = (float)window.getSize().x;
     float windowHeight = (float)window.getSize().y;
-    bool focused = true;
 
     // Create Player and set tile size
     std::vector<Tile> tiles;
     float tileSize = 800.0f / 24.0f * mult;
-    Player player(100.0f, 300.0f, tileSize, tileSize, mult);
+    float startingX = 100.0f;
+    float startingY = 100.0f;
+    Player player(&startingX, &startingY, &tileSize, &tileSize, &mult);
 
     // Generate Tiles
     int tileMap[24][24] = {
@@ -48,12 +49,14 @@ int main() {
 
     for (int i = 0; i < 24; i++) {
         for (int j = 0; j < 24; j++) {
+            float x = j * tileSize;
+            float y = i * tileSize;
             if (tileMap[i][j] == 1) {
-                tiles.push_back(Tile(j * tileSize, i * tileSize, tileSize, tileSize, "tile"));
+                tiles.push_back(Tile(&x, &y, &tileSize, &tileSize, "tile"));
             } else if (tileMap[i][j] == 9) {
-                player.setPosition(j * tileSize, i * tileSize);
+                player.setPosition(&x, &y);
             } else if (tileMap[i][j] == 2) {
-                tiles.push_back(Lava(j * tileSize, i * tileSize, tileSize, tileSize));
+                tiles.push_back(Lava(&x, &y, &tileSize, &tileSize));
             }
         }
     }
@@ -64,18 +67,15 @@ int main() {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 window.close();
-            } else if (event.type == sf::Event::GainedFocus) {
-                focused = true;
-            } else if (event.type == sf::Event::LostFocus) {
-                focused = false;
             }
         }
 
         // Input
-        if (focused) {
+        if (window.hasFocus()) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
                 window.close();
-            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
                 player.jump();
             }
             if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) && player.getPosition().left > 0) {
@@ -87,7 +87,7 @@ int main() {
         }
 
         // Update the Player
-        player.update(windowWidth, windowHeight, tiles);
+        player.update(&tiles);
 
         // Draw stuff
         window.clear(sf::Color(200, 200, 200));
