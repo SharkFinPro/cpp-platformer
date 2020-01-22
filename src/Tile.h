@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML\Graphics.hpp>
-#include <string>
 
 class Tile {
 protected:
@@ -10,8 +9,7 @@ protected:
 	std::string type = "";
 
 public:
-	Tile();
-	Tile(float *x, float *y, float *w, float *h, std::string type_);
+	Tile(float x, float y, float w, float h, std::string type_);
 
 	sf::FloatRect getPosition();
 

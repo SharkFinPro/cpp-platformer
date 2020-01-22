@@ -1,6 +1,4 @@
-﻿  Lava.cpp
-  Player.cpp
-  Tile.cpp
+﻿  Player.cpp
   main.cpp
   Generating Code...
   Platformer.vcxproj -> D:\SharkFin Stuff\code\github-projects\cpp-platformer\src\Debug\Platformer.exe

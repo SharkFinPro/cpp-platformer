@@ -9,5 +9,5 @@ private:
 public:
 	void init();
 
-	Lava(float *x, float *y, float *w, float *h) : Tile(x, y, w, h, "lava") { init(); };
+	Lava(float x, float y, float w, float h) : Tile(x, y, w, h, "lava") { init(); };
 };

@@ -1,18 +1,14 @@
 #include "Tile.h"
 
-Tile::Tile() {
-
-}
-
-Tile::Tile(float *x, float *y, float *w, float *h, std::string type_) {
-    position.x = *x;
-    position.y = *y;
-
+Tile::Tile(float x, float y, float w, float h, std::string type_) {
     type = type_;
+
+    position.x = x;
+    position.y = y;
     
-    tileShape.setSize(sf::Vector2f(*w, *h));
+    tileShape.setSize(sf::Vector2f(w, h));
     tileShape.setPosition(position);
-    tileShape.setFillColor(sf::Color(125, 125, 125));
+    tileShape.setFillColor(sf::Color::White);
 }
 
 sf::FloatRect Tile::getPosition() {

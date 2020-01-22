@@ -1,31 +1,31 @@
 #include "Player.h"
-#include <vector>
 #include <string>
+#include <vector>
 
-#include <iostream>
-
-void Player::init(float *change) {
+void Player::init(float change, std::vector<Tile> *items) {
     tileShape.setFillColor(sf::Color(42, 139, 200));
 
-    speed *= *change;
-    maxSpeed *= *change;
+    // Set the tiles to the items array
+    tiles = items;
 
-    gravity *= *change;
-
-    jumpHeight *= *change;
-    maxFallSpeed *= *change;
+    // Apply changes to speeds based off screen size
+    speed *= change;
+    maxSpeed *= change;
+    gravity *= change;
+    jumpHeight *= change;
+    maxFallSpeed *= change;
 }
 
 void Player::reset() {
-    setPosition(&startX, &startY);
+    setPosition(startX, startY);
 }
 
-void Player::setPosition(float *x, float *y) {
-    position.x = *x;
-    position.y = *y;
+void Player::setPosition(float x, float y) {
+    position.x = x;
+    position.y = y;
 
-    startX = *x;
-    startY = *y;
+    startX = x;
+    startY = y;
 
     tileShape.setPosition(position);
 }
@@ -62,7 +62,7 @@ void Player::collideWith(float xv, float yv, Tile *tile) {
     }
 }
 
-void Player::update(std::vector<Tile> *tiles) {
+void Player::update() {
     // Apply x updates & collisions
     xvel /= 1.55f;
     if (xvel > maxSpeed) {
@@ -71,7 +71,7 @@ void Player::update(std::vector<Tile> *tiles) {
         xvel = -maxSpeed;
     }
     position.x += xvel;
-    for (int i = 0; i < (int)tiles->size(); i++) {
+    for (size_t i = 0; i < tiles->size(); i++) {
         collideWith(xvel, 0, &tiles->at(i));
     }
     
@@ -79,7 +79,7 @@ void Player::update(std::vector<Tile> *tiles) {
     falling = true;
     yvel += gravity;
     position.y += yvel;
-    for (int i = 0; i < (int)tiles->size(); i++) {
+    for (size_t i = 0; i < tiles->size(); i++) {
         collideWith(0, yvel, &tiles->at(i));
     }
 
