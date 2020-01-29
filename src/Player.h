@@ -19,18 +19,22 @@ private:
 
 	bool falling = true;
 
+	std::string state = "";
+
 	std::vector<Tile> *tiles;
+	
+	int *shadow;
 
 public:
-	void init(float change, std::vector<Tile> *items);
+	void init(float change, std::vector<Tile> *items, int *shadow);
 
-	Player(float x, float y, float w, float h, float change, std::vector<Tile> *items) : Tile(x, y, w, h, "player") { init(change, items); };
+	Player(float x, float y, float w, float h, float change, std::vector<Tile> *items, int *shadow) : Tile(x, y, w, h, "player") { init(change, items, shadow); };
 
 	void reset();
 
 	void setPosition(float x, float y);
 
-	void collideWith(float xv, float yv, Tile *tile);
+	bool collideWith(float xv, float yv, Tile *tile);
 	
 	void update();
 

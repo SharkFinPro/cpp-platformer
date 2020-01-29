@@ -1,6 +1,8 @@
 #include "Player.h"
 #include "Wall.h"
 #include "Lava.h"
+#include "Water.h"
+#include "JumpPad.h"
 #include <vector>
 #include <SFML/Graphics.hpp>
 
@@ -8,16 +10,16 @@ int tileMap[24][24] = {
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 3, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 3, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 3, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 3, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 1, 0, 0, 1},
+    {1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1},
+    {1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1},
     {2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 2},
     {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
@@ -37,10 +39,17 @@ int main() {
     sf::RenderWindow window(sf::VideoMode((int)(800 * mult), (int)(800 * mult)), "Platformer", sf::Style::Close);
     window.setFramerateLimit(60);
 
+    // Other Variables
+    int shadow = 0;
+    sf::RectangleShape overlay;
+    overlay.setSize(sf::Vector2f(800 * mult, 800 * mult));
+    overlay.setPosition(sf::Vector2f(0, 0));
+    overlay.setFillColor(sf::Color(0, 0, 0, 255 - shadow));
+
     // Create Player and set tile size
     std::vector<Tile> tiles;
     float tileSize = 800.0f / 24.0f * mult;
-    Player player(100.0f, 100.0f, tileSize, tileSize, mult, &tiles);
+    Player player(100.0f, 100.0f, tileSize, tileSize, mult, &tiles, &shadow);
 
     // Generate Tiles
     for (int i = 0; i < 24; i++) {
@@ -51,6 +60,12 @@ int main() {
                 break;
             case 2:
                 tiles.push_back(Lava(j * tileSize, i * tileSize, tileSize, tileSize));
+                break;
+            case 3:
+                tiles.push_back(Water(j * tileSize, i * tileSize, tileSize, tileSize));
+                break;
+            case 4:
+                tiles.push_back(JumpPad(j * tileSize, i * tileSize, tileSize, tileSize));
                 break;
             case 9:
                 player.setPosition(j * tileSize, i * tileSize);
@@ -73,29 +88,38 @@ int main() {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
                 window.close();
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-                player.jump();
+            if (shadow >= 255) {
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+                    player.jump();
+                }
+                if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))) {
+                    player.moveLeft();
+                }
+                if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))) {
+                    player.moveRight();
+                }
             }
-            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))) {
-                player.moveLeft();
+
+            // Update the Player
+            player.update();
+
+            // Draw stuff
+            window.clear(sf::Color(200, 200, 200));
+
+            window.draw(player.getShape());
+
+            for (size_t i = 0; i < tiles.size(); i++) {
+                window.draw(tiles[i].getShape());
             }
-            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))) {
-                player.moveRight();
+
+            if (shadow < 255) {
+                overlay.setFillColor(sf::Color(0, 0, 0, 255 - shadow));
+                window.draw(overlay);
+                shadow += 4;
             }
+
+            window.display();
         }
-
-        // Update the Player
-        player.update();
-
-        // Draw stuff
-        window.clear(sf::Color(200, 200, 200));
-        
-        for (size_t i = 0; i < tiles.size(); i++) {
-            window.draw(tiles[i].getShape());
-        }
-        window.draw(player.getShape());
-
-        window.display();
     }
 
     return 0;
