@@ -2,9 +2,10 @@
 #include <string>
 #include <vector>
 
-void Player::init(std::vector<Tile>* items, int* _shadow) {
+void Player::init(std::vector<Tile>* items, int* _shadow, sf::Vector2u _window) {
     tileShape.setFillColor(sf::Color(42, 139, 200));
 
+    window = _window;
     shadow = _shadow;
     tiles = items;
 }
@@ -12,6 +13,7 @@ void Player::init(std::vector<Tile>* items, int* _shadow) {
 void Player::reset() {
     xvel = 0.0f;
     yvel = 0.0f;
+    health = 100;
     setPosition(startX, startY);
     *shadow = 0;
 }
@@ -39,7 +41,7 @@ bool Player::collideWith(float xv, float yv, Tile *tile) {
 
     if (y + h > ty && y < ty + th && x + w > tx && x < tx + tw) { // Check if tiles collide
         if (tile->getType().compare("lava") == 0) {
-            reset();
+            
         } else if (tile->getType().compare("water") == 0) {
             
         } else if (yv > 0) { // Bottom
@@ -57,6 +59,7 @@ bool Player::collideWith(float xv, float yv, Tile *tile) {
             xvel = 0;
             position.x = tx + tw;
         }
+        health -= tile->getDamage();
         return true;
     }
     return false;
@@ -97,6 +100,14 @@ void Player::update() {
 
     // Set tileshape position
     tileShape.setPosition(position);
+
+    // Check for Death
+    if (position.y > window.y) {
+        health -= 2;
+    }
+    if (health <= 0) {
+        reset();
+    }
 }
 
 void Player::jump() {
@@ -117,4 +128,8 @@ void Player::moveLeft() {
 
 void Player::moveRight() {
     xvel += speed;
+}
+
+int Player::getHealth() {
+    return health;
 }

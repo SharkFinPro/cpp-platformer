@@ -39,7 +39,7 @@ int main() {
     sf::RenderWindow window(sf::VideoMode((int)(800 * scale.x), (int)(800 * scale.y)), "Platformer", sf::Style::Close);
     window.setFramerateLimit(60);
 
-    // Other Variables
+    // Overlay
     int shadow = 0;
     sf::RectangleShape overlay;
     overlay.setSize(sf::Vector2f(800 * scale.x, 800 * scale.y));
@@ -49,7 +49,7 @@ int main() {
     // Create Player and set tile size
     std::vector<Tile> tiles;
     float tileSize = 800.0f / 24.0f;
-    Player player(100.0f, 100.0f, tileSize, tileSize, &tiles, &shadow, scale);
+    Player player(100.0f, 100.0f, tileSize, tileSize, &tiles, &shadow, window.getSize(), scale);
 
     // Generate Tiles
     for (int i = 0; i < 24; i++) {
@@ -73,6 +73,15 @@ int main() {
             }
         }
     }
+
+    // Player health overlay
+    sf::Font healthFont;
+    healthFont.loadFromFile("square.ttf");
+    sf::Text playerHealth = sf::Text();
+    playerHealth.setFont(healthFont);
+    playerHealth.setPosition(sf::Vector2f(0.0f, 0.0f));
+    playerHealth.setFillColor(sf::Color::Red);
+    playerHealth.setCharacterSize(75);
 
     while (window.isOpen()) {
         // Events
@@ -111,6 +120,9 @@ int main() {
             for (size_t i = 0; i < tiles.size(); i++) {
                 window.draw(tiles[i].getShape());
             }
+
+            playerHealth.setString("Health: " + std::to_string(player.getHealth()));
+            window.draw(playerHealth);
 
             if (shadow < 255) {
                 overlay.setFillColor(sf::Color(0, 0, 0, 255 - shadow));

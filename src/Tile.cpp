@@ -22,3 +22,7 @@ sf::RectangleShape Tile::getShape() {
 std::string Tile::getType() {
     return type;
 }
+
+int Tile::getDamage() {
+    return damage;
+}

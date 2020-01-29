@@ -3,9 +3,6 @@
 #include <SFML\Graphics.hpp>
 
 class Lava : public Tile {
-private:
-	float damage = 1;
-
 public:
 	void init();
 

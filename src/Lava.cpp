@@ -2,4 +2,5 @@
 
 void Lava::init() {
 	tileShape.setFillColor(sf::Color(255, 127, 80));
+	damage = 1;
 }

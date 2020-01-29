@@ -8,6 +8,8 @@ protected:
 
 	std::string type = "";
 
+	int damage = 0;
+
 public:
 	Tile(float x, float y, float w, float h, sf::Vector2f scale, std::string type_);
 
@@ -16,4 +18,6 @@ public:
 	sf::RectangleShape getShape();
 
 	std::string getType();
+
+	int getDamage();
 };

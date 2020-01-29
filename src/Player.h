@@ -4,6 +4,8 @@
 
 class Player : public Tile {
 private:
+	int health = 100;
+
 	float startX = 0.0f;
 	float startY = 0.0f;
 
@@ -19,6 +21,8 @@ private:
 
 	bool falling = true;
 
+	sf::Vector2u window;
+
 	std::string state = "";
 
 	std::vector<Tile> *tiles;
@@ -26,9 +30,9 @@ private:
 	int *shadow;
 
 public:
-	void init(std::vector<Tile> *items, int *shadow);
+	void init(std::vector<Tile> *items, int *shadow, sf::Vector2u window);
 
-	Player(float x, float y, float w, float h, std::vector<Tile> *items, int *shadow, sf::Vector2f scale) : Tile(x, y, w, h, scale, "player") { init(items, shadow); };
+	Player(float x, float y, float w, float h, std::vector<Tile> *items, int *shadow, sf::Vector2u window, sf::Vector2f scale) : Tile(x, y, w, h, scale, "player") { init(items, shadow, window); };
 
 	void reset();
 
@@ -43,4 +47,6 @@ public:
 	void moveLeft();
 
 	void moveRight();
+
+	int getHealth();
 };
