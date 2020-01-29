@@ -1,26 +1,17 @@
 #include "Player.h"
 #include <string>
 #include <vector>
-#include <iostream>
 
-void Player::init(float change, std::vector<Tile>* items, int* _shadow) {
+void Player::init(std::vector<Tile>* items, int* _shadow) {
     tileShape.setFillColor(sf::Color(42, 139, 200));
 
-    // Link overlay shadow
     shadow = _shadow;
-
-    // Set the tiles to the items array
     tiles = items;
-
-    // Apply changes to speeds based off screen size
-    speed *= change;
-    maxSpeed *= change;
-    gravity *= change;
-    jumpHeight *= change;
-    maxFallSpeed *= change;
 }
 
 void Player::reset() {
+    xvel = 0.0f;
+    yvel = 0.0f;
     setPosition(startX, startY);
     *shadow = 0;
 }
@@ -46,11 +37,11 @@ bool Player::collideWith(float xv, float yv, Tile *tile) {
     float w = getShape().getSize().x;
     float h = getShape().getSize().y;
 
-    if (y + h > ty&& y < ty + th && x + w > tx&& x < tx + tw) { // Check if tiles collide
+    if (y + h > ty && y < ty + th && x + w > tx && x < tx + tw) { // Check if tiles collide
         if (tile->getType().compare("lava") == 0) {
             reset();
         } else if (tile->getType().compare("water") == 0) {
-
+            
         } else if (yv > 0) { // Bottom
             yvel = 0;
             falling = false;
@@ -79,15 +70,13 @@ void Player::update() {
     }
     if (xvel > maxSpeed) {
         xvel = maxSpeed;
-    }
-    else if (xvel < -maxSpeed) {
+    } else if (xvel < -maxSpeed) {
         xvel = -maxSpeed;
     }
     position.x += xvel;
     for (size_t i = 0; i < tiles->size(); i++) {
         collideWith(xvel, 0, &tiles->at(i));
     }
-    
     
     // Apply y updates & collisions & check state change
     falling = true;
@@ -96,22 +85,15 @@ void Player::update() {
         yvel /= 1.25;
     }
     position.y += yvel;
-    bool stateChange = true;
-    bool checked = false;
     std::string nextState = "";
     for (size_t i = 0; i < tiles->size(); i++) {
         if (collideWith(0, yvel, &tiles->at(i))) {
-            checked = true;
-            if (tiles->at(i).getType().compare(state) == 0) {
-                stateChange = false;
-            } else {
+            if (tiles->at(i).getType().compare(state) != 0) {
                 nextState = tiles->at(i).getType();
             }
         }
     }
-    if (stateChange || !checked) {
-        state = nextState;
-    }
+    state = nextState;
 
     // Set tileshape position
     tileShape.setPosition(position);

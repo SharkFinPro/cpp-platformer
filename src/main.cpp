@@ -35,40 +35,40 @@ int tileMap[24][24] = {
 
 int main() {
     // Window
-    float mult = (float)sf::VideoMode().getDesktopMode().width / 1920;
-    sf::RenderWindow window(sf::VideoMode((int)(800 * mult), (int)(800 * mult)), "Platformer", sf::Style::Close);
+    sf::Vector2f scale = sf::Vector2f((float)sf::VideoMode().getDesktopMode().width / 1920, (float)sf::VideoMode().getDesktopMode().height / 1080);
+    sf::RenderWindow window(sf::VideoMode((int)(800 * scale.x), (int)(800 * scale.y)), "Platformer", sf::Style::Close);
     window.setFramerateLimit(60);
 
     // Other Variables
     int shadow = 0;
     sf::RectangleShape overlay;
-    overlay.setSize(sf::Vector2f(800 * mult, 800 * mult));
+    overlay.setSize(sf::Vector2f(800 * scale.x, 800 * scale.y));
     overlay.setPosition(sf::Vector2f(0, 0));
     overlay.setFillColor(sf::Color(0, 0, 0, 255 - shadow));
 
     // Create Player and set tile size
     std::vector<Tile> tiles;
-    float tileSize = 800.0f / 24.0f * mult;
-    Player player(100.0f, 100.0f, tileSize, tileSize, mult, &tiles, &shadow);
+    float tileSize = 800.0f / 24.0f;
+    Player player(100.0f, 100.0f, tileSize, tileSize, &tiles, &shadow, scale);
 
     // Generate Tiles
     for (int i = 0; i < 24; i++) {
         for (int j = 0; j < 24; j++) {
             switch (tileMap[i][j]) {
             case 1:
-                tiles.push_back(Wall(j * tileSize, i * tileSize, tileSize, tileSize));
+                tiles.push_back(Wall(j * tileSize, i * tileSize, tileSize, tileSize, scale));
                 break;
             case 2:
-                tiles.push_back(Lava(j * tileSize, i * tileSize, tileSize, tileSize));
+                tiles.push_back(Lava(j * tileSize, i * tileSize, tileSize, tileSize, scale));
                 break;
             case 3:
-                tiles.push_back(Water(j * tileSize, i * tileSize, tileSize, tileSize));
+                tiles.push_back(Water(j * tileSize, i * tileSize, tileSize, tileSize, scale));
                 break;
             case 4:
-                tiles.push_back(JumpPad(j * tileSize, i * tileSize, tileSize, tileSize));
+                tiles.push_back(JumpPad(j * tileSize, i * tileSize, tileSize, tileSize, scale));
                 break;
             case 9:
-                player.setPosition(j * tileSize, i * tileSize);
+                player.setPosition(j * tileSize * scale.x, i * tileSize * scale.y);
                 break;
             }
         }
