@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 
+#include <iostream>
+
 void Player::init(std::vector<Tile>* items, int* _shadow, sf::Vector2u _window) {
     tileShape.setFillColor(sf::Color(42, 139, 200));
 
@@ -41,10 +43,14 @@ bool Player::collideWith(float xv, float yv, Tile *tile) {
 
     if (y + h > ty && y < ty + th && x + w > tx && x < tx + tw) { // Check if tiles collide
         if (tile->getType().compare("lava") == 0) {
-            
+            // Don't apply collisions to lava
         } else if (tile->getType().compare("water") == 0) {
-            
+            // Don't apply collisions to water
         } else if (yv > 0) { // Bottom
+            // Fall Damage
+            if (yv > 15) {
+                health -= (int)(yv / 5);
+            }
             yvel = 0;
             falling = false;
             position.y = ty - h;
