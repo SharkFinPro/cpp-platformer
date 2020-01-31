@@ -9,20 +9,14 @@ private:
 	float startX = 0.0f;
 	float startY = 0.0f;
 
-	float speed = 2.0f;
-	float maxSpeed = 10.0f;
+	float speed = 1.0f;
+	float maxSpeed = 6.0f;
 
-	float gravity = 0.4f;
+	float gravity = 0.34f;
 	float xvel = 0.0f;
 	float yvel = 0.0f;
-
-	float xDecrease = 1.55f;
-	float waterDecrease = 1.25f;
 	
-	float jumpHeight = 9.5f;
-	float maxFallSpeed = 12.0f;
-
-	int minFallHeight = 15;
+	float jumpHeight = 6.3f;
 
 	bool falling = true;
 
@@ -35,9 +29,9 @@ private:
 	int *shadow;
 
 public:
-	void init(std::vector<Tile> *items, int *shadow, sf::Vector2u window, float scale);
+	void init(std::vector<Tile> *items, int *shadow, sf::Vector2u window);
 
-	Player(float x, float y, float w, float h, std::vector<Tile> *items, int *shadow, sf::Vector2u window, float scale) : Tile(x, y, w, h, "player") { init(items, shadow, window, scale); };
+	Player(float x, float y, float w, float h, std::vector<Tile> *items, int *shadow, sf::Vector2u window) : Tile(x, y, w, h, "player") { init(items, shadow, window); };
 
 	void reset();
 

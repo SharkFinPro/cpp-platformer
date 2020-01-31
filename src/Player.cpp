@@ -2,20 +2,12 @@
 #include <string>
 #include <vector>
 
-void Player::init(std::vector<Tile>* items, int* _shadow, sf::Vector2u _window, float scale) {
+void Player::init(std::vector<Tile>* items, int* _shadow, sf::Vector2u _window) {
     tileShape.setFillColor(sf::Color(42, 139, 200));
 
     window = _window;
     shadow = _shadow;
     tiles = items;
-    
-    //
-    speed *= scale;
-    maxSpeed *= scale;
-    gravity *= scale;
-    jumpHeight *= scale;
-    maxFallSpeed *= scale;
-    minFallHeight = (int)(minFallHeight * scale);
 }
 
 void Player::reset() {
@@ -54,8 +46,9 @@ bool Player::collideWith(float xv, float yv, Tile *tile) {
             // Don't apply collisions to water
         } else if (yv > 0) { // Bottom
             // Fall Damage
-            if (yv > minFallHeight) {
-                health -= (int)(yv / (minFallHeight / 3));
+            int damage = (int)(yv * 2 - 18);
+            if (damage > 0) {
+                health -= damage;
             }
             yvel = 0;
             falling = false;
@@ -79,27 +72,27 @@ bool Player::collideWith(float xv, float yv, Tile *tile) {
 
 void Player::update() {
     // Apply x updates & collisions
-    xvel /= xDecrease;
+    position.x += xvel;
+    xvel /= 2.0f;
     if (state.compare("water") == 0) {
-        xvel /= waterDecrease;
+        xvel /= 1.75f;
     }
     if (xvel > maxSpeed) {
         xvel = maxSpeed;
     } else if (xvel < -maxSpeed) {
         xvel = -maxSpeed;
     }
-    position.x += xvel;
     for (size_t i = 0; i < tiles->size(); i++) {
         collideWith(xvel, 0, &tiles->at(i));
     }
     
     // Apply y updates & collisions & check state change
     falling = true;
+    position.y += yvel;
     yvel += gravity;
     if (state.compare("water") == 0) {
-        yvel /= waterDecrease;
+        yvel /= 2.0f;
     }
-    position.y += yvel;
     std::string nextState = "";
     for (size_t i = 0; i < tiles->size(); i++) {
         if (collideWith(0, yvel, &tiles->at(i))) {
@@ -124,8 +117,7 @@ void Player::update() {
 
 void Player::jump() {
     if (state.compare("water") == 0) {
-        yvel = -jumpHeight;
-        yvel /= 1.5;
+        yvel = -jumpHeight * gravity;
     } else if (state.compare("JumpPad") == 0) {
         yvel = -jumpHeight * 1.25f;
     } else if (!falling) {

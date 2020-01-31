@@ -36,6 +36,9 @@ int tileMap[24][24] = {
 int main() {
     // Window
     float scale = sf::VideoMode().getDesktopMode().width / 1920.0f;
+    if (scale < 0.5f) {
+        scale = 0.5;
+    }
     sf::RenderWindow window(sf::VideoMode((int)(800 * scale), (int)(800 * scale)), "Platformer", sf::Style::Close);
     window.setFramerateLimit(60);
 
@@ -48,8 +51,8 @@ int main() {
 
     // Create Player and set tile size
     std::vector<Tile> tiles;
-    float tileSize = window.getSize().x / 24.0f;
-    Player player(100.0f, 100.0f, tileSize, tileSize, &tiles, &shadow, window.getSize(), scale);
+    float tileSize = 400 / 24.0f;
+    Player player(100.0f, 100.0f, tileSize, tileSize, &tiles, &shadow, window.getSize());
 
     // Generate Tiles
     for (int i = 0; i < 24; i++) {
@@ -81,7 +84,7 @@ int main() {
     playerHealth.setFont(healthFont);
     playerHealth.setPosition(sf::Vector2f(25.0f, 0.0f));
     playerHealth.setFillColor(sf::Color::Red);
-    playerHealth.setCharacterSize((unsigned int)(50 * scale));
+    playerHealth.setCharacterSize((unsigned int)(25));
 
     while (window.isOpen()) {
         // Events
@@ -129,6 +132,12 @@ int main() {
                 window.draw(overlay);
                 shadow += 4;
             }
+
+            // Scale to window size
+            sf::View view = window.getDefaultView();
+            view.zoom(0.5f / scale);
+            view.setCenter(200.0f, 200.0f);
+            window.setView(view);
 
             window.display();
         }
