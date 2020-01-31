@@ -2,14 +2,20 @@
 #include <string>
 #include <vector>
 
-#include <iostream>
-
-void Player::init(std::vector<Tile>* items, int* _shadow, sf::Vector2u _window) {
+void Player::init(std::vector<Tile>* items, int* _shadow, sf::Vector2u _window, float scale) {
     tileShape.setFillColor(sf::Color(42, 139, 200));
 
     window = _window;
     shadow = _shadow;
     tiles = items;
+    
+    //
+    speed *= scale;
+    maxSpeed *= scale;
+    gravity *= scale;
+    jumpHeight *= scale;
+    maxFallSpeed *= scale;
+    minFallHeight = (int)(minFallHeight * scale);
 }
 
 void Player::reset() {
@@ -48,8 +54,8 @@ bool Player::collideWith(float xv, float yv, Tile *tile) {
             // Don't apply collisions to water
         } else if (yv > 0) { // Bottom
             // Fall Damage
-            if (yv > 15) {
-                health -= (int)(yv / 5);
+            if (yv > minFallHeight) {
+                health -= (int)(yv / (minFallHeight / 3));
             }
             yvel = 0;
             falling = false;
@@ -73,9 +79,9 @@ bool Player::collideWith(float xv, float yv, Tile *tile) {
 
 void Player::update() {
     // Apply x updates & collisions
-    xvel /= 1.55f;
+    xvel /= xDecrease;
     if (state.compare("water") == 0) {
-        xvel /= 1.25;
+        xvel /= waterDecrease;
     }
     if (xvel > maxSpeed) {
         xvel = maxSpeed;
@@ -91,7 +97,7 @@ void Player::update() {
     falling = true;
     yvel += gravity;
     if (state.compare("water") == 0) {
-        yvel /= 1.25;
+        yvel /= waterDecrease;
     }
     position.y += yvel;
     std::string nextState = "";

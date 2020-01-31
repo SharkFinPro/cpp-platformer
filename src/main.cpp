@@ -35,21 +35,21 @@ int tileMap[24][24] = {
 
 int main() {
     // Window
-    int scale = sf::VideoMode().getDesktopMode().width / 1920;
-    sf::RenderWindow window(sf::VideoMode(800 * scale, 800 * scale), "Platformer", sf::Style::Close);
+    float scale = sf::VideoMode().getDesktopMode().width / 1920.0f;
+    sf::RenderWindow window(sf::VideoMode((int)(800 * scale), (int)(800 * scale)), "Platformer", sf::Style::Close);
     window.setFramerateLimit(60);
 
     // Overlay
     int shadow = 0;
     sf::RectangleShape overlay;
-    overlay.setSize(sf::Vector2f(800, 800));
+    overlay.setSize(sf::Vector2f((float)window.getSize().x, (float)window.getSize().y));
     overlay.setPosition(sf::Vector2f(0, 0));
     overlay.setFillColor(sf::Color(0, 0, 0, 255 - shadow));
 
     // Create Player and set tile size
     std::vector<Tile> tiles;
-    float tileSize = 800.0f / 24.0f;
-    Player player(100.0f, 100.0f, tileSize, tileSize, &tiles, &shadow, window.getSize());
+    float tileSize = window.getSize().x / 24.0f;
+    Player player(100.0f, 100.0f, tileSize, tileSize, &tiles, &shadow, window.getSize(), scale);
 
     // Generate Tiles
     for (int i = 0; i < 24; i++) {
@@ -73,15 +73,15 @@ int main() {
             }
         }
     }
-
+    
     // Player health overlay
     sf::Font healthFont;
     healthFont.loadFromFile("square.ttf");
     sf::Text playerHealth = sf::Text();
     playerHealth.setFont(healthFont);
-    playerHealth.setPosition(sf::Vector2f(0.0f, 0.0f));
+    playerHealth.setPosition(sf::Vector2f(25.0f, 0.0f));
     playerHealth.setFillColor(sf::Color::Red);
-    playerHealth.setCharacterSize(50);
+    playerHealth.setCharacterSize((unsigned int)(50 * scale));
 
     while (window.isOpen()) {
         // Events
@@ -130,13 +130,6 @@ int main() {
                 shadow += 4;
             }
 
-            // create a view half the size of the default view
-            sf::View view = window.getDefaultView();
-            view.setCenter(400, 400);
-            view.zoom(1.0f / (float)scale);
-
-            // Display the window
-            window.setView(view);
             window.display();
         }
     }
