@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Air.cpp" />
+    <ClCompile Include="Faller.cpp" />
     <ClCompile Include="JumpPad.cpp" />
     <ClCompile Include="Lava.cpp" />
     <ClCompile Include="main.cpp" />
@@ -28,6 +30,8 @@
     <ClCompile Include="Water.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Air.h" />
+    <ClInclude Include="Faller.h" />
     <ClInclude Include="JumpPad.h" />
     <ClInclude Include="Lava.h" />
     <ClInclude Include="Player.h" />

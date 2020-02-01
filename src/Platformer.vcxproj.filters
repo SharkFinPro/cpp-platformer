@@ -36,6 +36,12 @@
     <ClCompile Include="JumpPad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Faller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Air.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -54,6 +60,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="JumpPad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Faller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Air.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

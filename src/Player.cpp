@@ -2,12 +2,11 @@
 #include <string>
 #include <vector>
 
-void Player::init(std::vector<Tile>* items, int* _shadow, sf::Vector2u _window) {
+void Player::init(int* _shadow, sf::Vector2u _window) {
     tileShape.setFillColor(sf::Color(42, 139, 200));
 
     window = _window;
     shadow = _shadow;
-    tiles = items;
 }
 
 void Player::reset() {
@@ -44,11 +43,17 @@ bool Player::collideWith(float xv, float yv, Tile *tile) {
             // Don't apply collisions to lava
         } else if (tile->getType().compare("water") == 0) {
             // Don't apply collisions to water
+        } else if (tile->getType().compare("Air") == 0) {
+            // Don't apply collisions to air
         } else if (yv > 0) { // Bottom
             // Fall Damage
             int damage = (int)(yv * 2 - 18);
             if (damage > 0) {
                 health -= damage;
+            }
+            // Make blocks fall
+            if (tile->getType().compare("Faller") == 0) {
+                tile->tryToFall();
             }
             yvel = 0;
             falling = false;

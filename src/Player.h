@@ -23,15 +23,13 @@ private:
 	sf::Vector2u window;
 
 	std::string state = "";
-
-	std::vector<Tile> *tiles;
 	
 	int *shadow;
 
 public:
-	void init(std::vector<Tile> *items, int *shadow, sf::Vector2u window);
+	void init(int *shadow, sf::Vector2u window);
 
-	Player(float x, float y, float w, float h, std::vector<Tile> *items, int *shadow, sf::Vector2u window) : Tile(x, y, w, h, "player") { init(items, shadow, window); };
+	Player(float x, float y, float w, float h, int *shadow, sf::Vector2u window, int id) : Tile(x, y, w, h, "player", id) { init(shadow, window); };
 
 	void reset();
 

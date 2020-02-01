@@ -6,5 +6,5 @@ class Water : public Tile {
 public:
 	void init();
 
-	Water(float x, float y, float w, float h) : Tile(x, y, w, h, "water") { init(); };
+	Water(float x, float y, float w, float h, int id) : Tile(x, y, w, h, "water", id) { init(); };
 };

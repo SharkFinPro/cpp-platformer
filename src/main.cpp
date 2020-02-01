@@ -1,8 +1,10 @@
 #include "Player.h"
+#include "Air.h"
 #include "Wall.h"
 #include "Lava.h"
 #include "Water.h"
 #include "JumpPad.h"
+#include "Faller.h"
 #include <vector>
 #include <SFML/Graphics.hpp>
 
@@ -17,7 +19,7 @@ int tileMap[24][24] = {
     {1, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 3, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 3, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 1, 0, 0, 1},
+    {1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5, 5, 5, 1, 0, 0, 1},
     {1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1},
     {1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1},
@@ -32,6 +34,12 @@ int tileMap[24][24] = {
     {2, 0, 0, 0, 0, 0, 0, 4, 4, 4, 0, 9, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 };
+
+int id = 0;
+
+int nextId() {
+    return id++;
+}
 
 int main() {
     // Window
@@ -51,26 +59,34 @@ int main() {
 
     // Create Player and set tile size
     std::vector<Tile> tiles;
+    Tile::setTiles(&tiles);
     float tileSize = 400 / 24.0f;
-    Player player(100.0f, 100.0f, tileSize, tileSize, &tiles, &shadow, window.getSize());
+    Player player(100.0f, 100.0f, tileSize, tileSize, &shadow, window.getSize(), nextId());
 
     // Generate Tiles
     for (int i = 0; i < 24; i++) {
         for (int j = 0; j < 24; j++) {
             switch (tileMap[i][j]) {
+            case 0:
+                tiles.push_back(Air(j * tileSize, i * tileSize, tileSize, tileSize, nextId()));
+                break;
             case 1:
-                tiles.push_back(Wall(j * tileSize, i * tileSize, tileSize, tileSize));
+                tiles.push_back(Wall(j * tileSize, i * tileSize, tileSize, tileSize, nextId()));
                 break;
             case 2:
-                tiles.push_back(Lava(j * tileSize, i * tileSize, tileSize, tileSize));
+                tiles.push_back(Lava(j * tileSize, i * tileSize, tileSize, tileSize, nextId()));
                 break;
             case 3:
-                tiles.push_back(Water(j * tileSize, i * tileSize, tileSize, tileSize));
+                tiles.push_back(Water(j * tileSize, i * tileSize, tileSize, tileSize, nextId()));
                 break;
             case 4:
-                tiles.push_back(JumpPad(j * tileSize, i * tileSize, tileSize, tileSize));
+                tiles.push_back(JumpPad(j * tileSize, i * tileSize, tileSize, tileSize, nextId()));
+                break;
+            case 5:
+                tiles.push_back(Faller(j * tileSize, i * tileSize, tileSize, tileSize, nextId()));
                 break;
             case 9:
+                tiles.push_back(Air(j * tileSize, i * tileSize, tileSize, tileSize, nextId()));
                 player.setPosition(j * tileSize, i * tileSize);
                 break;
             }
@@ -119,7 +135,6 @@ int main() {
             window.clear(sf::Color(200, 200, 200));
 
             window.draw(player.getShape());
-
             for (size_t i = 0; i < tiles.size(); i++) {
                 window.draw(tiles[i].getShape());
             }

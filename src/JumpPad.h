@@ -6,5 +6,5 @@ class JumpPad : public Tile {
 public:
 	void init();
 
-	JumpPad(float x, float y, float w, float h) : Tile(x, y, w, h, "JumpPad") { init(); };
+	JumpPad(float x, float y, float w, float h, int id) : Tile(x, y, w, h, "JumpPad", id) { init(); };
 };
